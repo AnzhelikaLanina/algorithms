@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState, useEffect} from "react";
+import React, {ChangeEvent, useState} from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from './list-page.module.css';
 import {Input} from "../ui/input/input";
