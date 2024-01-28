@@ -238,6 +238,7 @@ export const ListPage: React.FC = () => {
                 state: ElementStates.Changing,
                 isAdded: true,
                 newCircle: { item: value },
+                head: false,
             };
             if (i > 0) {
                 array[i - 1] = {
@@ -246,6 +247,7 @@ export const ListPage: React.FC = () => {
                     isAdded: false,
                     newCircle: null,
                 };
+                array[0].head = true;
             }
             setArray([...array]);
             await delay(500);
@@ -276,6 +278,7 @@ export const ListPage: React.FC = () => {
         list.deleteByIndex(index);
         for (let i = 0; i <= index; i++) {
             array[i].state = ElementStates.Changing;
+            array[i].tail = false;
             setArray([...array]);
             await delay(500);
         }
@@ -300,6 +303,11 @@ export const ListPage: React.FC = () => {
         setIsLoaderDeleteIndexElement(false);
     }
 
+    const disabledButtonPush = value === "";
+    const disabledButtonPushIndex = index > array.length - 1;
+    const disabledButtonDelete = array.length < 1;
+    const disabledButtonDeleteIndex = index > array.length - 1;
+
   return (
     <SolutionLayout title="Связный список">
         <div className={styles.main}>
@@ -321,7 +329,8 @@ export const ListPage: React.FC = () => {
                           isLoaderDeleteHead ||
                           isLoaderDeleteTail ||
                           isLoaderPushIndexElement ||
-                          isLoaderDeleteIndexElement}
+                          isLoaderDeleteIndexElement ||
+                          disabledButtonPush}
                   />
                   <Button
                       extraClass={styles.button__value}
@@ -332,7 +341,8 @@ export const ListPage: React.FC = () => {
                           isLoaderDeleteHead ||
                           isLoaderDeleteTail ||
                           isLoaderPushIndexElement ||
-                          isLoaderDeleteIndexElement}
+                          isLoaderDeleteIndexElement ||
+                          disabledButtonPush}
                   />
                   <Button
                       extraClass={styles.button__value}
@@ -343,7 +353,8 @@ export const ListPage: React.FC = () => {
                           isLoaderPushTail ||
                           isLoaderDeleteTail ||
                           isLoaderPushIndexElement ||
-                          isLoaderDeleteIndexElement}
+                          isLoaderDeleteIndexElement ||
+                          disabledButtonDelete}
                   />
                   <Button
                       extraClass={styles.button__value}
@@ -354,7 +365,8 @@ export const ListPage: React.FC = () => {
                           isLoaderPushTail ||
                           isLoaderDeleteHead ||
                           isLoaderPushIndexElement ||
-                          isLoaderDeleteIndexElement}
+                          isLoaderDeleteIndexElement ||
+                          disabledButtonDelete}
                   />
               </div>
               <div className={styles.box}>
@@ -362,6 +374,7 @@ export const ListPage: React.FC = () => {
                       placeholder={'Введите индекс'}
                       value={index}
                       onChange={onChangeIndex}
+                      min={0}
                   />
                   <Button
                       text={'Добавить по индексу'}
@@ -372,7 +385,9 @@ export const ListPage: React.FC = () => {
                           isLoaderPushTail ||
                           isLoaderDeleteHead ||
                           isLoaderDeleteTail ||
-                          isLoaderDeleteIndexElement}
+                          isLoaderDeleteIndexElement ||
+                          disabledButtonPush ||
+                          disabledButtonPushIndex}
                   />
                   <Button
                       text={'Удалить по индексу'}
@@ -383,7 +398,9 @@ export const ListPage: React.FC = () => {
                           isLoaderPushTail ||
                           isLoaderDeleteHead ||
                           isLoaderDeleteTail ||
-                          isLoaderPushIndexElement}
+                          isLoaderPushIndexElement ||
+                          disabledButtonDelete ||
+                          disabledButtonDeleteIndex}
                   />
               </div>
           </div>

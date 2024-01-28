@@ -38,6 +38,9 @@ export const QueuePage: React.FC = () => {
 
     useEffect(() => {
         !value ? setDisabledPush(true) : setDisabledPush(false);
+        if(queue.isFull()) {
+            setDisabledPush(true);
+        }
     }, [value])
 
     useEffect(() => {
@@ -48,7 +51,7 @@ export const QueuePage: React.FC = () => {
         } else {
             setDisabledClear(true);
         }
-    }, [queueArray]);
+    }, [queueArray])
 
     const pushItem = async () => {
         setIsLoaderPush(true);

@@ -22,7 +22,7 @@ export const StringComponent: React.FC = () => {
         const middle = Math.floor(array.length / 2);
         const end = array.length - 1;
         setCurrentIndex(0);
-        for (let i = 0; i < middle; i++) {
+        for (let i = 0; i <= middle; i++) {
             await delay(1000);
             [array[i], array[end - i]] = [array[end - i], array[i]];
             setCurrentIndex((i) => i + 1);

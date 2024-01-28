@@ -48,12 +48,12 @@
 
 .circle__head {
     position: absolute;
-    bottom: 100px;
-    left: 14px;
+    bottom: 120px;
+    left: 11px;
 }
 
 .circle__tail {
     position: absolute;
     top: 120px;
-    left: 10px;
+    left: 11px;
 }

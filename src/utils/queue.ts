@@ -3,6 +3,7 @@ interface IQueue<T> {
     dequeue: () => void;
     peak: () => T | null;
     isEmpty: () => boolean;
+    isFull: () => boolean;
     clearQueue: () => void;
     getHead: () => number;
     getTail: () => number;
@@ -22,6 +23,10 @@ export class Queue<T> implements IQueue<T> {
     }
 
     isEmpty = () => this.length === 0;
+
+    isFull = () => {
+        return this.tail === this.size;
+    }
 
     enqueue = (item: T) => {
         if (this.length >= this.size) {
@@ -62,5 +67,4 @@ export class Queue<T> implements IQueue<T> {
     getHead = () => this.head;
     getTail = () => this.tail - 1;
     getLength = () => this.length;
-
 }
