@@ -1,0 +1,59 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 120px;
+}
+
+.box {
+    max-width: 952px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.button__value {
+    min-width: 175px;
+    max-height: 60px;
+}
+
+.button__index {
+    min-width: 364px;
+    max-height: 60px;
+}
+
+
+.circles {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    gap: 15px;
+    justify-content: center;
+}
+
+.circle {
+    display: flex;
+    align-items: center;
+    gap: 17px;
+    position: relative;
+}
+
+.circle__head {
+    position: absolute;
+    bottom: 120px;
+    left: 11px;
+}
+
+.circle__tail {
+    position: absolute;
+    top: 120px;
+    left: 11px;
+}
