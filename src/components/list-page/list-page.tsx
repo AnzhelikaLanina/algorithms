@@ -185,7 +185,7 @@ export const ListPage: React.FC = () => {
         }
         setArray([...array]);
         await delay(500);
-        array[0].state = ElementStates.Modified;
+        array[1].state = ElementStates.Modified;
         array.shift();
         setArray([...array]);
         await delay(500);
@@ -256,6 +256,7 @@ export const ListPage: React.FC = () => {
             ...array[index!],
             isAdded: false,
             newCircle: null,
+            state: ElementStates.Default
         };
         array.splice(index, 0, {
             item: value,
@@ -319,6 +320,7 @@ export const ListPage: React.FC = () => {
                       placeholder={'Введите значение'}
                       value={value}
                       onChange={onChangeValue}
+                      data-test="input-list"
                   />
                   <Button
                       extraClass={styles.button__value}
@@ -331,6 +333,7 @@ export const ListPage: React.FC = () => {
                           isLoaderPushIndexElement ||
                           isLoaderDeleteIndexElement ||
                           disabledButtonPush}
+                      data-test="button-add-head"
                   />
                   <Button
                       extraClass={styles.button__value}
@@ -343,6 +346,7 @@ export const ListPage: React.FC = () => {
                           isLoaderPushIndexElement ||
                           isLoaderDeleteIndexElement ||
                           disabledButtonPush}
+                      data-test="button-add-tail"
                   />
                   <Button
                       extraClass={styles.button__value}
@@ -355,6 +359,7 @@ export const ListPage: React.FC = () => {
                           isLoaderPushIndexElement ||
                           isLoaderDeleteIndexElement ||
                           disabledButtonDelete}
+                      data-test="button-delete-head"
                   />
                   <Button
                       extraClass={styles.button__value}
@@ -367,6 +372,7 @@ export const ListPage: React.FC = () => {
                           isLoaderPushIndexElement ||
                           isLoaderDeleteIndexElement ||
                           disabledButtonDelete}
+                      data-test="button-delete-tail"
                   />
               </div>
               <div className={styles.box}>
@@ -375,6 +381,7 @@ export const ListPage: React.FC = () => {
                       value={index}
                       onChange={onChangeIndex}
                       min={0}
+                      data-test="input-index-list"
                   />
                   <Button
                       text={'Добавить по индексу'}
@@ -388,6 +395,7 @@ export const ListPage: React.FC = () => {
                           isLoaderDeleteIndexElement ||
                           disabledButtonPush ||
                           disabledButtonPushIndex}
+                      data-test="button-add-index-list"
                   />
                   <Button
                       text={'Удалить по индексу'}
@@ -401,12 +409,17 @@ export const ListPage: React.FC = () => {
                           isLoaderPushIndexElement ||
                           disabledButtonDelete ||
                           disabledButtonDeleteIndex}
+                      data-test="button-delete-index-list"
                   />
               </div>
           </div>
           <div className={styles.circles}>
               {array?.map((item, index) => (
-                  <div className={styles.circle} key={index}>
+                  <div
+                      className={styles.circle}
+                      key={index}
+                      data-test="element-list"
+                  >
                     <Circle
                         key={index}
                         state={item.state}

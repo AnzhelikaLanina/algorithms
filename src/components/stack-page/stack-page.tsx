@@ -30,6 +30,13 @@ export const StackPage: React.FC = () => {
         !value ? setDisabledPush(true) : setDisabledPush(false);
     }, [value])
 
+    useEffect(() => {
+       if (!stackArray || stackArray.length == 0) {
+           setDisabledDel(true);
+           setDisabledClear(true);
+       }
+    }, [stackArray])
+
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value);
     }
@@ -64,8 +71,12 @@ export const StackPage: React.FC = () => {
         stackArray.pop();
         setStackArray([...stackArray]);
         setIsLoaderDel(false);
-        setDisabledPush(false);
-        setDisabledClear(false);
+        setDisabledPush(true);
+        if (stackArray.length == 0) {
+            setDisabledClear(true);
+        } else {
+            setDisabledClear(false);
+        }
     }
 
     const clearStackArray = async () => {
@@ -91,18 +102,21 @@ export const StackPage: React.FC = () => {
                         maxLength={4}
                         value={value}
                         onChange={onChange}
+                        data-test="input-stack"
                     />
                     <Button
                         text={'Добавить'}
                         disabled={disabledPush}
                         onClick={pushItem}
                         isLoader={isLoaderPush}
+                        data-test="button-add-stack"
                     />
                     <Button
                         text={'Удалить'}
                         disabled={disabledDel}
                         onClick={deleteItem}
                         isLoader={isLoaderDel}
+                        data-test="button-delete-stack"
                     />
                 </div>
                 <Button
@@ -110,6 +124,7 @@ export const StackPage: React.FC = () => {
                     disabled={disabledClear}
                     onClick={clearStackArray}
                     isLoader={isLoaderClear}
+                    data-test="button-reset-stack"
                 />
             </div>
             <div className={styles.circles}>

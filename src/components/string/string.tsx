@@ -4,13 +4,12 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import {Input} from "../ui/input/input";
 import {Button} from "../ui/button/button";
 import {Circle} from "../ui/circle/circle";
-import {delay} from "../../utils/utils";
-import {ElementStates} from "../../types/element-states";
+import {reverseLettersFunction} from "../../utils/string";
+import {TStringElement} from "../../types/string";
 
 export const StringComponent: React.FC = () => {
-    const [letters, setLetters] = useState<string[] | null>(null);
+    const [letters, setLetters] = useState<TStringElement[]>([]);
     const [value, setValue] = useState('');
-    const [currentIndex, setCurrentIndex] = useState(0);
     const [isLoader, setIsLoader] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -18,44 +17,15 @@ export const StringComponent: React.FC = () => {
         !value ? setDisabled(true) : setDisabled(false);
     }, [value]);
 
-    const reverseLetters = async (array: string[]) => {
-        const middle = Math.floor(array.length / 2);
-        const end = array.length - 1;
-        setCurrentIndex(0);
-        for (let i = 0; i <= middle; i++) {
-            await delay(1000);
-            [array[i], array[end - i]] = [array[end - i], array[i]];
-            setCurrentIndex((i) => i + 1);
-            setLetters(array);
-        }
-        setIsLoader(false);
-    }
-
-    const splitWord = (value: string) => {
+    const splitWord = async (value: string) => {
         setIsLoader(true);
-        const array = value.split('');
-        setLetters(array);
-        void reverseLetters(array);
+        await reverseLettersFunction(value, setLetters);
+        setIsLoader(false);
     }
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
         setValue(e.target.value);
     }
-
-   const changeCircleColor = (
-        index: number,
-        currentIndex: number,
-        array: Array<string | number>
-    ) => {
-        const length = array.length - 1;
-        if (currentIndex < index || currentIndex > length - index) {
-            return ElementStates.Modified;
-        }
-        if (currentIndex === index || currentIndex === length - index) {
-            return ElementStates.Changing;
-        }
-        return ElementStates.Default;
-    };
 
   return (
     <SolutionLayout title="Строка">
@@ -66,6 +36,7 @@ export const StringComponent: React.FC = () => {
                     maxLength={11}
                     type = {"text"}
                     onChange={onChange}
+                    data-test="input-string"
                 />
                 <div className={styles.button}>
                     <Button
@@ -73,15 +44,16 @@ export const StringComponent: React.FC = () => {
                         onClick={() => splitWord(value)}
                         isLoader={isLoader}
                         disabled={disabled}
+                        data-test="button-string"
                     />
                 </div>
             </div>
             <div className={styles.letters}>
                 {letters?.map((item, index) => (
                     <Circle
-                        letter={item}
+                        letter={String(item.item)}
                         key={index}
-                        state={changeCircleColor(currentIndex, index, letters)}
+                        state={item.state}
                     />
                 ))}
             </div>

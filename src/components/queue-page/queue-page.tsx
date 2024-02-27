@@ -120,18 +120,21 @@ export const QueuePage: React.FC = () => {
                         placeholder={'Введите значение'}
                         onChange={onChange}
                         value={value}
+                        data-test="input-queue"
                     />
                     <Button
                         text={'Добавить'}
                         disabled={disabledPush}
                         onClick={pushItem}
                         isLoader={isLoaderPush}
+                        data-test="button-add-queue"
                     />
                     <Button
                         text={'Удалить'}
                         disabled={disabledClear}
                         onClick={deleteItem}
                         isLoader={isLoaderClear}
+                        data-test="button-delete-queue"
                     />
                 </div>
                 <Button
@@ -139,6 +142,7 @@ export const QueuePage: React.FC = () => {
                     disabled={disabledClear}
                     onClick={clearQueueArray}
                     isLoader={isLoaderClear}
+                    data-test="button-reset-queue"
                 />
             </div>
             <div className={styles.circles}>
