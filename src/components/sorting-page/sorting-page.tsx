@@ -6,8 +6,8 @@ import {Button} from "../ui/button/button";
 import {Direction} from "../../types/direction";
 import {Column} from "../ui/column/column";
 import {ElementStates} from "../../types/element-states";
-import {delay} from "../../utils/utils";
 import {IElement} from "../../types/sorting";
+import {sortBubbleFunction, sortSelectionFunction} from "../../utils/sorting";
 
 export const SortingPage: React.FC = () => {
     const [method, setMethod] = useState("selection");
@@ -18,12 +18,6 @@ export const SortingPage: React.FC = () => {
 
     const loader = (direction: Direction, loaderBoolean: boolean) => {
         direction === Direction.Descending ? setIsLoaderDes(loaderBoolean) : setIsLoaderAsc(loaderBoolean);
-    }
-
-    const swapElements = (array: IElement[], firstIndex: number, secondIndex: number) => {
-        const tmp = array[firstIndex];
-        array[firstIndex] = array[secondIndex];
-        array[secondIndex] = tmp;
     }
 
     const createRandomNumber = (min: number, max: number) => {
@@ -51,25 +45,7 @@ export const SortingPage: React.FC = () => {
     const sortBubble = async (direction: Direction) => {
         setDisabled(true);
         loader(direction, true);
-        for (let i= 0; i < array.length; i++) {
-            for (let j= 0; j < array.length - 1 - i; j++) {
-                array[j].state = ElementStates.Changing;
-                if (array[j + 1]) array[j + 1].state = ElementStates.Changing;
-                setArray([...array]);
-                await delay(1000);
-                if (direction === Direction.Descending ?
-                    array[j].number < array[j+1].number
-                    : array[j].number > array[j + 1].number)
-                {
-                    swapElements(array, j, j+1);
-                }
-                array[j].state = ElementStates.Default;
-                if (array[j + 1]) array[j + 1].state = ElementStates.Default;
-                setArray([...array]);
-            }
-            array[array.length - i - 1].state = ElementStates.Modified;
-            setArray([...array]);
-        }
+        await sortBubbleFunction(direction, array, setArray);
         loader(direction, false);
         setDisabled(false);
     }
@@ -77,31 +53,7 @@ export const SortingPage: React.FC = () => {
     const sortSelection = async (direction: Direction) => {
         setDisabled(true);
         loader(direction, true);
-        for (let i = 0; i < array.length; i++) {
-                let maxInd = i;
-                array[maxInd].state = ElementStates.Changing;
-                for (let j = i; j < array.length; j++) {
-                    array[j].state = ElementStates.Changing;
-                    setArray([...array]);
-                    await delay(1000);
-                    if ((direction === Direction.Descending ?
-                        array[j].number : array[maxInd].number) > (direction === Direction.Descending ?
-                        array[maxInd].number : array[j].number)) {
-                            maxInd = j;
-                            array[j].state = ElementStates.Changing;
-                            array[maxInd].state = i === maxInd ? ElementStates.Changing : ElementStates.Default;
-                    }
-                    if (j !== maxInd) {
-                        array[j].state = ElementStates.Default;
-                    }
-                    setArray([...array]);
-                }
-
-                swapElements(array, maxInd, i);
-                array[maxInd].state = ElementStates.Default;
-                array[i].state = ElementStates.Modified;
-                setArray([...array]);
-        }
+        await sortSelectionFunction(direction, array, setArray);
         loader(direction, false);
         setDisabled(false);
     }

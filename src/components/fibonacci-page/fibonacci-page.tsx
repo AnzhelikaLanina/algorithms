@@ -8,7 +8,7 @@ import {delay} from "../../utils/utils";
 
 export const FibonacciPage: React.FC = () => {
   const [numbers, setNumbers] = useState<number[] | null>([]);
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<string>("");
   const [isLoader, setIsLoader] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -40,7 +40,7 @@ export const FibonacciPage: React.FC = () => {
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const valueNumber = Number(e.target.value);
     if (valueNumber > 0 && valueNumber < 20) {
-      setValue(valueNumber);
+      setValue(e.target.value);
     } else {
       setDisabled(true)
     }
@@ -48,7 +48,7 @@ export const FibonacciPage: React.FC = () => {
 
   const onClick = async () => {
     setIsLoader(true);
-    await createFibArray(value, setNumbers);
+    await createFibArray(Number(value), setNumbers);
     setIsLoader(false);
   }
 
@@ -61,6 +61,7 @@ export const FibonacciPage: React.FC = () => {
               max={19}
               type ={'number'}
               onChange={onChange}
+              data-test="input-fib"
           />
           <div className={styles.box}>
             <Button
@@ -69,6 +70,7 @@ export const FibonacciPage: React.FC = () => {
                 isLoader={isLoader}
                 onClick={onClick}
                 disabled={disabled}
+                data-test="button-fib"
             />
           </div>
         </div>
