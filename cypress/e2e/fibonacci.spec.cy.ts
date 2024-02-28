@@ -1,4 +1,9 @@
 /// <reference types="cypress" />
+import {
+    inputFib,
+    buttonFib,
+    circles
+} from '../constants/constants';
 describe("Проверка корректного выполнения действий на странице Фибоначчи", function() {
     const array = [1, 1, 2, 3, 5, 8];
     beforeEach(function () {
@@ -6,24 +11,24 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Кнопка добавления недоступна, когда в инпуте пусто", function () {
-        if (cy.get('[data-test="input-fib"]').should("have.value", "")) {
-            cy.get('[data-test="button-fib"]').should("be.disabled");
+        if (cy.get(inputFib).should("have.value", "")) {
+            cy.get(buttonFib).should("be.disabled");
         }
     });
 
     it("Вывод последовательности Фибоначчи корректен", function () {
-        cy.get('[data-test="input-fib"]')
+        cy.get(inputFib)
             .type("5")
             .should("have.value", "5");
 
-        cy.get('[data-test="button-fib"]').as("button");
+        cy.get(buttonFib).as("button");
         cy.get("@button")
             .click()
             .should("be.disabled")
             .invoke("attr", "class")
             .then((classList) => expect(classList).contain("loader"));
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles")
             .then((circle) => {
                 cy.wrap(circle[0]).contains(array[0]);

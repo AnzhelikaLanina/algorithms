@@ -1,23 +1,36 @@
 /// <reference types="cypress" />
+import {
+    modifiedColor,
+    changingColor,
+    defaultColor,
+    circles,
+    container,
+    inputList,
+    inputIndexList,
+    buttonAddHead,
+    buttonAddTail,
+    buttonAddIndex,
+    buttonDeleteHead,
+    buttonDeleteTail,
+    buttonDeleteIndex,
+    elementList,
+    circleSmall
+} from '../constants/constants';
 describe("Проверка корректного выполнения действий на странице Очередь", function () {
-    const defaultColor = "circle_default";
-    const changingColor = "circle_changing";
-    const modifiedColor = "circle_modified";
-
     beforeEach(function () {
         cy.visit("/list");
     });
 
     it("Кнопки добавления недоступны, когда в инпуте пусто", function () {
-        if (cy.get('[data-test="input-list"]').should("have.value", "")) {
-            cy.get('[data-test="button-add-head"]').should("be.disabled");
-            cy.get('[data-test="button-add-tail"]').should("be.disabled");
-            cy.get('[data-test="button-add-index-list"]').should("be.disabled");
+        if (cy.get(inputList).should("have.value", "")) {
+            cy.get(buttonAddHead).should("be.disabled");
+            cy.get(buttonAddTail).should("be.disabled");
+            cy.get(buttonAddIndex).should("be.disabled");
         }
     });
 
     it("Отрисовка дефолтного списка корректна", function () {
-        cy.get("[class^=circle_content]").as("container");
+        cy.get(container).as("container");
         cy.get("@container")
             .should("have.length", 4)
             .then((circle) => {
@@ -28,21 +41,21 @@ describe("Проверка корректного выполнения дейс�
                 .invoke("text")
                 .should("include", "tail");
         });
-        cy.get('[data-test="button-delete-head"]').should("be.enabled");
-        cy.get('[data-test="button-delete-tail"]').should("be.enabled");
-        cy.get('[data-test="button-delete-index-list"]').should("be.enabled");
+        cy.get(buttonDeleteHead).should("be.enabled");
+        cy.get(buttonDeleteTail).should("be.enabled");
+        cy.get(buttonDeleteIndex).should("be.enabled");
     });
 
     it("Элемент добавляется в head корректно", function () {
-        cy.get('[data-test="button-add-head"]').as("addHeadButton");
-        cy.get('[data-test="button-add-tail"]').as("addTailButton");
-        cy.get('[data-test="button-delete-head"]').as("deleteHeadButton");
-        cy.get('[data-test="button-delete-tail"]').as("deleteTailButton");
-        cy.get('[data-test="button-add-index-list"]').as("addIndexButton");
-        cy.get('[data-test="button-delete-index-list"]').as("deleteIndexButton");
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(buttonAddHead).as("addHeadButton");
+        cy.get(buttonAddTail).as("addTailButton");
+        cy.get(buttonDeleteHead).as("deleteHeadButton");
+        cy.get(buttonDeleteTail).as("deleteTailButton");
+        cy.get(buttonAddIndex).as("addIndexButton");
+        cy.get(buttonDeleteIndex).as("deleteIndexButton");
+        cy.get(circles).as("circles");
 
-        cy.get('[data-test="input-list"]').as("input")
+        cy.get(inputList).as("input")
         cy.get("@input")
             .type("1")
             .should("have.value", "1");
@@ -59,9 +72,9 @@ describe("Проверка корректного выполнения дейс�
         cy.get('@addIndexButton').should("be.disabled");
         cy.get('@deleteIndexButton').should("be.disabled");
 
-        cy.get('[data-test="element-list"]').then((circle) => {
+        cy.get(elementList).then((circle) => {
             cy.wrap(circle[0])
-                .find("[class*=circle_small]")
+                .find(circleSmall)
                 .should("have.text", "1")
                 .invoke("attr", "class")
                 .then((classList) => expect(classList).contains(changingColor));
@@ -91,7 +104,7 @@ describe("Проверка корректного выполнения дейс�
                 .then((classList) => expect(classList).contains(defaultColor));
         });
 
-        cy.get("[class^=circle_content]").then((circle) => {
+        cy.get(container).then((circle) => {
             cy.wrap(circle[0])
                 .invoke("text")
                 .should("include", "head");
@@ -107,15 +120,15 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Элемент добавляется в tail корректно", function () {
-        cy.get('[data-test="button-add-head"]').as("addHeadButton");
-        cy.get('[data-test="button-add-tail"]').as("addTailButton");
-        cy.get('[data-test="button-delete-head"]').as("deleteHeadButton");
-        cy.get('[data-test="button-delete-tail"]').as("deleteTailButton");
-        cy.get('[data-test="button-add-index-list"]').as("addIndexButton");
-        cy.get('[data-test="button-delete-index-list"]').as("deleteIndexButton");
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(buttonAddHead).as("addHeadButton");
+        cy.get(buttonAddTail).as("addTailButton");
+        cy.get(buttonDeleteHead).as("deleteHeadButton");
+        cy.get(buttonDeleteTail).as("deleteTailButton");
+        cy.get(buttonAddIndex).as("addIndexButton");
+        cy.get(buttonDeleteIndex).as("deleteIndexButton");
+        cy.get(circles).as("circles");
 
-        cy.get('[data-test="input-list"]').as("input")
+        cy.get(inputList).as("input")
         cy.get("@input")
             .type("3")
             .should("have.value", "3");
@@ -132,9 +145,9 @@ describe("Проверка корректного выполнения дейс�
         cy.get('@addIndexButton').should("be.disabled");
         cy.get('@deleteIndexButton').should("be.disabled");
 
-        cy.get('[data-test="element-list"]').then((circle) => {
+        cy.get(elementList).then((circle) => {
             cy.wrap(circle[3])
-                .find("[class*=circle_small]")
+                .find(circleSmall)
                 .should("have.text", "3")
                 .invoke("attr", "class")
                 .then((classList) => expect(classList).contains(changingColor));
@@ -148,7 +161,7 @@ describe("Проверка корректного выполнения дейс�
 
         cy.wait(1000);
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
 
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[4]).should("have.text", "3");
@@ -166,7 +179,7 @@ describe("Проверка корректного выполнения дейс�
                 .then((classList) => expect(classList).contains(defaultColor));
         });
 
-        cy.get("[class^=circle_content]").then((circle) => {
+        cy.get(container).then((circle) => {
             cy.wrap(circle[4])
                 .invoke("text")
                 .should("include", "tail");
@@ -182,20 +195,20 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Элемент добавляется по индексу корректно", function () {
-        cy.get('[data-test="button-add-head"]').as("addHeadButton");
-        cy.get('[data-test="button-add-tail"]').as("addTailButton");
-        cy.get('[data-test="button-delete-head"]').as("deleteHeadButton");
-        cy.get('[data-test="button-delete-tail"]').as("deleteTailButton");
-        cy.get('[data-test="button-add-index-list"]').as("addIndexButton");
-        cy.get('[data-test="button-delete-index-list"]').as("deleteIndexButton");
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(buttonAddHead).as("addHeadButton");
+        cy.get(buttonAddTail).as("addTailButton");
+        cy.get(buttonDeleteHead).as("deleteHeadButton");
+        cy.get(buttonDeleteTail).as("deleteTailButton");
+        cy.get(buttonAddIndex).as("addIndexButton");
+        cy.get(buttonDeleteIndex).as("deleteIndexButton");
+        cy.get(circles).as("circles");
 
-        cy.get('[data-test="input-list"]').as("input")
+        cy.get(inputList).as("input")
         cy.get("@input")
             .type("3")
             .should("have.value", "3");
 
-        cy.get('[data-test="input-index-list"]').as("inputIndex")
+        cy.get(inputIndexList).as("inputIndex")
         cy.get("@inputIndex")
             .type("2")
             .should("have.value", "2");
@@ -212,9 +225,9 @@ describe("Проверка корректного выполнения дейс�
         cy.get('@addTailButton').should("be.disabled");
         cy.get('@deleteIndexButton').should("be.disabled");
 
-        cy.get('[data-test="element-list"]').then((circle) => {
+        cy.get(elementList).then((circle) => {
             cy.wrap(circle[2])
-                .find("[class*=circle_small]")
+                .find(circleSmall)
                 .should("have.text", "3")
                 .invoke("attr", "class")
                 .then((classList) => expect(classList).contains(changingColor));
@@ -226,7 +239,7 @@ describe("Проверка корректного выполнения дейс�
                 .then((classList) => expect(classList).contains(changingColor));
         });
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
 
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[2]).should("have.text", "3");
@@ -254,13 +267,13 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Элемент удаляется из head корректно", function () {
-        cy.get('[data-test="button-add-head"]').as("addHeadButton");
-        cy.get('[data-test="button-add-tail"]').as("addTailButton");
-        cy.get('[data-test="button-delete-head"]').as("deleteHeadButton");
-        cy.get('[data-test="button-delete-tail"]').as("deleteTailButton");
-        cy.get('[data-test="button-add-index-list"]').as("addIndexButton");
-        cy.get('[data-test="button-delete-index-list"]').as("deleteIndexButton");
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(buttonAddHead).as("addHeadButton");
+        cy.get(buttonAddTail).as("addTailButton");
+        cy.get(buttonDeleteHead).as("deleteHeadButton");
+        cy.get(buttonDeleteTail).as("deleteTailButton");
+        cy.get(buttonAddIndex).as("addIndexButton");
+        cy.get(buttonDeleteIndex).as("deleteIndexButton");
+        cy.get(circles).as("circles");
 
         cy.get("@deleteHeadButton")
             .click()
@@ -274,9 +287,9 @@ describe("Проверка корректного выполнения дейс�
         cy.get('@addIndexButton').should("be.disabled");
         cy.get('@deleteIndexButton').should("be.disabled");
 
-        cy.get('[data-test="element-list"]').then((circle) => {
+        cy.get(elementList).then((circle) => {
             cy.wrap(circle[0])
-                .find("[class*=circle_small]")
+                .find(circleSmall)
                 .should("have.text", "2")
                 .invoke("attr", "class")
                 .then((classList) => expect(classList).contains(changingColor));
@@ -291,7 +304,7 @@ describe("Проверка корректного выполнения дейс�
 
         cy.wait(500);
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
 
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[0]).should("have.text", "34");
@@ -309,7 +322,7 @@ describe("Проверка корректного выполнения дейс�
                 .then((classList) => expect(classList).contains(defaultColor));
         });
 
-        cy.get("[class^=circle_content]").then((circle) => {
+        cy.get(container).then((circle) => {
             cy.wrap(circle[0])
                 .invoke("text")
                 .should("include", "head");
@@ -325,13 +338,13 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Элемент удаляется из tail корректно", function () {
-        cy.get('[data-test="button-add-head"]').as("addHeadButton");
-        cy.get('[data-test="button-add-tail"]').as("addTailButton");
-        cy.get('[data-test="button-delete-head"]').as("deleteHeadButton");
-        cy.get('[data-test="button-delete-tail"]').as("deleteTailButton");
-        cy.get('[data-test="button-add-index-list"]').as("addIndexButton");
-        cy.get('[data-test="button-delete-index-list"]').as("deleteIndexButton");
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(buttonAddHead).as("addHeadButton");
+        cy.get(buttonAddTail).as("addTailButton");
+        cy.get(buttonDeleteHead).as("deleteHeadButton");
+        cy.get(buttonDeleteTail).as("deleteTailButton");
+        cy.get(buttonAddIndex).as("addIndexButton");
+        cy.get(buttonDeleteIndex).as("deleteIndexButton");
+        cy.get(circles).as("circles");
 
         cy.get("@deleteTailButton")
             .click()
@@ -345,9 +358,9 @@ describe("Проверка корректного выполнения дейс�
         cy.get('@addIndexButton').should("be.disabled");
         cy.get('@deleteIndexButton').should("be.disabled");
 
-        cy.get('[data-test="element-list"]').then((circle) => {
+        cy.get(elementList).then((circle) => {
             cy.wrap(circle[3])
-                .find("[class*=circle_small]")
+                .find(circleSmall)
                 .should("have.text", "1")
                 .invoke("attr", "class")
                 .then((classList) => expect(classList).contains(changingColor));
@@ -362,7 +375,7 @@ describe("Проверка корректного выполнения дейс�
 
         cy.wait(500);
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
 
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[2]).should("have.text", "8");
@@ -380,7 +393,7 @@ describe("Проверка корректного выполнения дейс�
                 .then((classList) => expect(classList).contains(defaultColor));
         });
 
-        cy.get("[class^=circle_content]").then((circle) => {
+        cy.get(container).then((circle) => {
             cy.wrap(circle[2])
                 .invoke("text")
                 .should("include", "tail");
@@ -396,15 +409,15 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Элемент удаляется по индексу корректно", function () {
-        cy.get('[data-test="button-add-head"]').as("addHeadButton");
-        cy.get('[data-test="button-add-tail"]').as("addTailButton");
-        cy.get('[data-test="button-delete-head"]').as("deleteHeadButton");
-        cy.get('[data-test="button-delete-tail"]').as("deleteTailButton");
-        cy.get('[data-test="button-add-index-list"]').as("addIndexButton");
-        cy.get('[data-test="button-delete-index-list"]').as("deleteIndexButton");
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(buttonAddHead).as("addHeadButton");
+        cy.get(buttonAddTail).as("addTailButton");
+        cy.get(buttonDeleteHead).as("deleteHeadButton");
+        cy.get(buttonDeleteTail).as("deleteTailButton");
+        cy.get(buttonAddIndex).as("addIndexButton");
+        cy.get(buttonDeleteIndex).as("deleteIndexButton");
+        cy.get(circles).as("circles");
 
-        cy.get('[data-test="input-index-list"]').as("inputIndex")
+        cy.get(inputIndexList).as("inputIndex")
         cy.get("@inputIndex")
             .type("2")
             .should("have.value", "2");
@@ -423,9 +436,9 @@ describe("Проверка корректного выполнения дейс�
 
         cy.wait(500);
 
-        cy.get('[data-test="element-list"]').then((circle) => {
+        cy.get(elementList).then((circle) => {
             cy.wrap(circle[2])
-                .find("[class*=circle_small]")
+                .find(circleSmall)
                 .should("have.text", "8")
                 .invoke("attr", "class")
                 .then((classList) => expect(classList).contains(changingColor));
@@ -439,7 +452,7 @@ describe("Проверка корректного выполнения дейс�
 
         cy.wait(500);
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[2]).should("have.text", "1");
             cy.wrap(circle[2])

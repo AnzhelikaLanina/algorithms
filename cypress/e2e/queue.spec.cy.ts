@@ -1,38 +1,45 @@
 /// <reference types="cypress" />
+import {
+    changingColor,
+    defaultColor,
+    circles,
+    container,
+    inputQueue,
+    buttonAddQueue,
+    buttonDeleteQueue,
+    buttonResetQueue
+} from '../constants/constants';
 describe("Проверка корректного выполнения действий на странице Очередь", function () {
-    const defaultColor = "circle_default";
-    const changingColor = "circle_changing";
-
     beforeEach(function () {
         cy.visit("/queue");
     });
 
     it("Кнопка добавления недоступна, когда в инпуте пусто", function () {
-        if (cy.get('[data-test="input-queue"]').should("have.value", "")) {
-            cy.get('[data-test="button-add-queue"]').should("be.disabled");
+        if (cy.get(inputQueue).should("have.value", "")) {
+            cy.get(buttonAddQueue).should("be.disabled");
         }
     });
 
     it("Элемент добавляется корректно", function () {
-        cy.get('[data-test="button-delete-queue"]').as("deleteButton");
+        cy.get(buttonDeleteQueue).as("deleteButton");
         cy.get("@deleteButton").should("be.disabled");
 
-        cy.get('[data-test="button-reset-queue"]').as("resetButton");
+        cy.get(buttonResetQueue).as("resetButton");
         cy.get("@resetButton").should("be.disabled");
 
-        cy.get('[data-test="input-queue"]').as("input")
+        cy.get(inputQueue).as("input")
         cy.get("@input")
             .type("1")
             .should("have.value", "1");
 
-        cy.get('[data-test="button-add-queue"]').as("addButton");
+        cy.get(buttonAddQueue).as("addButton");
         cy.get("@addButton")
             .click()
             .should("be.disabled")
             .invoke("attr", "class")
             .then((classList) => expect(classList).contain("loader"));
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[0]).should("have.text", "1");
             cy.wrap(circle[0])
@@ -49,7 +56,7 @@ describe("Проверка корректного выполнения дейс�
                 .then((classList) => expect(classList).contains(defaultColor));
         });
 
-        cy.get("[class^=circle_content]").as("container");
+        cy.get(container).as("container");
         cy.get("@container").then((circle) => {
             cy.wrap(circle[0])
                 .invoke("text")
@@ -110,16 +117,16 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Элемент удаляется корректно", function () {
-        cy.get('[data-test="button-delete-queue"]').as("deleteButton");
+        cy.get(buttonDeleteQueue).as("deleteButton");
         cy.get("@deleteButton").should("be.disabled");
 
-        cy.get('[data-test="button-reset-queue"]').as("resetButton");
+        cy.get(buttonResetQueue).as("resetButton");
         cy.get("@resetButton").should("be.disabled");
 
-        cy.get('[data-test="input-queue"]').as("input");
+        cy.get(inputQueue).as("input");
         cy.get("@input").type("1");
 
-        cy.get('[data-test="button-add-queue"]').as("addButton");
+        cy.get(buttonAddQueue).as("addButton");
         cy.get("@addButton").click();
 
         cy.wait(500);
@@ -129,13 +136,13 @@ describe("Проверка корректного выполнения дейс�
 
         cy.wait(500);
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[0]).should("have.text", "1");
             cy.wrap(circle[1]).should("have.text", "3");
         });
 
-        cy.get("[class^=circle_content]").as("container");
+        cy.get(container).as("container");
         cy.get("@container").then((circle) => {
             cy.wrap(circle[0])
                 .invoke("text")
@@ -195,12 +202,12 @@ describe("Проверка корректного выполнения дейс�
 
 
     it("Кнопка очистки очереди работает корректно", function () {
-        cy.get('[data-test="button-reset-queue"]').as("resetButton");
+        cy.get(buttonResetQueue).as("resetButton");
         cy.get("@resetButton").should("be.disabled");
-        cy.get('[data-test="input-queue"]').as("input");
+        cy.get(inputQueue).as("input");
         cy.get("@input").type("1");
 
-        cy.get('[data-test="button-add-queue"]').as("addButton");
+        cy.get(buttonAddQueue).as("addButton");
         cy.get("@addButton").click();
 
         cy.wait(500);
@@ -210,7 +217,7 @@ describe("Проверка корректного выполнения дейс�
 
         cy.wait(500);
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[0]).should("have.text", "1");
             cy.wrap(circle[1]).should("have.text", "3");
@@ -223,7 +230,7 @@ describe("Проверка корректного выполнения дейс�
             .invoke("attr", "class")
             .then((classList) => expect(classList).contain("loader"));
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles").then((circle) => {
             cy.wrap(circle[0]).should("have.text", "");
             cy.wrap(circle[1]).should("have.text", "");

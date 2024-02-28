@@ -1,32 +1,36 @@
 /// <reference types="cypress" />
+import {
+    changingColor,
+    defaultColor,
+    modifiedColor,
+    inputString,
+    buttonString,
+    circles
+} from '../constants/constants';
 describe("Проверка корректного выполнения действий на странице Строка", function () {
-  const defaultColor = "circle_default";
-  const changingColor = "circle_changing";
-  const modifiedColor = "circle_modified";
-
   beforeEach(function () {
     cy.visit("/recursion");
   });
 
   it("Кнопка добавления недоступна, когда в инпуте пусто", function () {
-    if (cy.get('[data-test="input-string"]').should("have.value", "")) {
-      cy.get('[data-test="button-string"]').should("be.disabled");
+    if (cy.get(inputString).should("have.value", "")) {
+      cy.get(buttonString).should("be.disabled");
     }
   });
 
   it("Разворот строки корректен", function () {
-    cy.get('[data-test="input-string"]')
+    cy.get(inputString)
         .type("строка")
         .should("have.value", "строка");
 
-    cy.get('[data-test="button-string"]').as("button");
+    cy.get(buttonString).as("button");
     cy.get("@button")
         .click()
         .should("be.disabled")
         .invoke("attr", "class")
         .then((classList) => expect(classList).contain("loader"));
 
-    cy.get("[class^=circle_circle]").as("circles");
+    cy.get(circles).as("circles");
     cy.get("@circles")
         .should("have.length", 6)
         .then((circle) => {

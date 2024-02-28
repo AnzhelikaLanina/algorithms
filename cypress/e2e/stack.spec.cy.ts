@@ -1,38 +1,44 @@
 /// <reference types="cypress" />
+import {
+    changingColor,
+    defaultColor,
+    circles,
+    inputStack,
+    buttonDeleteStack,
+    buttonResetStack,
+    buttonAddStack
+} from '../constants/constants';
 describe("Проверка корректного выполнения действий на странице Стек", function () {
-    const defaultColor = "circle_default";
-    const changingColor = "circle_changing";
-
     beforeEach(function () {
         cy.visit("/stack");
     });
 
     it("Кнопка добавления недоступна, когда в инпуте пусто", function () {
-        if (cy.get('[data-test="input-stack"]').should("have.value", "")) {
-            cy.get('[data-test="button-add-stack"]').should("be.disabled");
+        if (cy.get(inputStack).should("have.value", "")) {
+            cy.get(buttonAddStack).should("be.disabled");
         }
     });
 
     it("Элемент добавляется корректно", function () {
-        cy.get('[data-test="button-delete-stack"]').as("deleteButton");
+        cy.get(buttonDeleteStack).as("deleteButton");
         cy.get("@deleteButton").should("be.disabled");
 
-        cy.get('[data-test="button-reset-stack"]').as("resetButton");
+        cy.get(buttonResetStack).as("resetButton");
         cy.get("@resetButton").should("be.disabled");
 
-        cy.get('[data-test="input-stack"]').as("input");
+        cy.get(inputStack).as("input");
         cy.get("@input")
             .type("1")
             .should("have.value", "1");
 
-        cy.get('[data-test="button-add-stack"]').as("addButton");
+        cy.get(buttonAddStack).as("addButton");
         cy.get("@addButton")
             .click()
             .should("be.disabled")
             .invoke("attr", "class")
             .then((classList) => expect(classList).contain("loader"));
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles")
             .should("have.length", 1)
             .then((circle) => {
@@ -102,16 +108,16 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Элемент удаляется корректно", function () {
-        cy.get('[data-test="button-delete-stack"]').as("deleteButton");
+        cy.get(buttonDeleteStack).as("deleteButton");
         cy.get("@deleteButton").should("be.disabled");
 
-        cy.get('[data-test="button-reset-stack"]').as("resetButton");
+        cy.get(buttonResetStack).as("resetButton");
         cy.get("@resetButton").should("be.disabled");
 
-        cy.get('[data-test="input-stack"]').as("input");
+        cy.get(inputStack).as("input");
         cy.get("@input").type("1");
 
-        cy.get('[data-test="button-add-stack"]').as("addButton");
+        cy.get(buttonAddStack).as("addButton");
         cy.get("@addButton").click();
 
         cy.wait(500);
@@ -133,7 +139,7 @@ describe("Проверка корректного выполнения дейс�
         cy.get('@addButton').should("be.disabled");
         cy.get("@resetButton").should("be.disabled");
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles")
             .should("have.length", 2)
             .then((circle) => {
@@ -177,13 +183,13 @@ describe("Проверка корректного выполнения дейс�
     });
 
     it("Кнопка очистки стека работает корректно", function () {
-        cy.get('[data-test="button-reset-stack"]').as("resetButton");
+        cy.get(buttonResetStack).as("resetButton");
         cy.get("@resetButton").should("be.disabled");
 
-        cy.get('[data-test="input-stack"]').as("input");
+        cy.get(inputStack).as("input");
         cy.get("@input").type("1");
 
-        cy.get('[data-test="button-add-stack"]').as("addButton");
+        cy.get(buttonAddStack).as("addButton");
         cy.get("@addButton").click();
 
         cy.wait(500);
@@ -200,7 +206,7 @@ describe("Проверка корректного выполнения дейс�
             .invoke("attr", "class")
             .then((classList) => expect(classList).contain("loader"));
 
-        cy.get("[class^=circle_circle]").as("circles");
+        cy.get(circles).as("circles");
         cy.get("@circles").should("have.length", 0);
 
         cy.get('@resetButton')
